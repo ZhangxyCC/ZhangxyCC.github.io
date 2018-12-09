@@ -359,7 +359,7 @@
                 
               
 
-              <time title="Created: 2018-12-09 15:17:02 / Modified: 19:49:52" itemprop="dateCreated datePublished" datetime="2018-12-09T15:17:02+08:00">2018-12-09</time>
+              <time title="Created: 2018-12-09 15:17:02 / Modified: 19:51:43" itemprop="dateCreated datePublished" datetime="2018-12-09T15:17:02+08:00">2018-12-09</time>
             
 
             
@@ -418,36 +418,26 @@
         
           
             <p>These days I am reviewing Algorithm couse in Coursera, which is taught by Prof.Robert Sedgewick and Prof. Kevin Wayne. I found some interview questions are interesting and really worthy to be explored. </p>
-<h2 id="Union-Find-interview-Questions"><a href="#Union-Find-interview-Questions" class="headerlink" title="Union Find interview Questions"></a>Union Find interview Questions</h2><blockquote>
+<h1 id="Union-Find-interview-Questions"><a href="#Union-Find-interview-Questions" class="headerlink" title="Union Find interview Questions"></a>Union Find interview Questions</h1><blockquote>
 <p><strong>Union-find with specific canonical element.</strong> Add a method find() to the union-find data type so that find(i) returns the largest element in the connected component containing i. The operations, union(), connected() and find() should all take logarithmic time or better.</p>
 </blockquote>
 <p>If you try to figure out how to implement weighted quick-union, then you will find add another array will be useful. For each element <em>i</em>, the array will store the maximum node under the root <em>i</em>.</p>
-<blockquote>
-<p><strong>Successor with delete.</strong> </p>
-</blockquote>
-<p>Make use of last question <em>Union-find with specific canonical element</em>. For example, if we have S = {0,1,2,3,4,5,6,7,8}. And we do:</p>
+<h2 id="Successor-with-delete"><a href="#Successor-with-delete" class="headerlink" title="Successor with delete."></a><strong>Successor with delete.</strong></h2><p>Make use of last question <em>Union-find with specific canonical element</em>. For example, if we have S = {0,1,2,3,4,5,6,7,8}. And we do:</p>
 <ol>
 <li>remove 5, that means we do <em>union(5,6)</em></li>
 <li>remove 7, that means we do <em>union(7,8)</em></li>
 <li>remove 6, that means we do <em>union(6,7)</em></li>
 </ol>
 <p>We can get the success of 5 is 8, for 8 is the largest number in the connected component which contains 5.</p>
-<h2 id="Analysis-of-Algorithms-interview-questions"><a href="#Analysis-of-Algorithms-interview-questions" class="headerlink" title="Analysis of Algorithms interview questions"></a>Analysis of Algorithms interview questions</h2><blockquote>
-<p>3-SUM in quadratic time</p>
-</blockquote>
-<p>It is similar to 2-SUM in O(N). In the 2-SUM, two pointers can be used, which point the begin and end of a sorted array. If the sum of two pointers are bigger than 0, then the end pointer should move backward.</p>
+<h1 id="Analysis-of-Algorithms-interview-questions"><a href="#Analysis-of-Algorithms-interview-questions" class="headerlink" title="Analysis of Algorithms interview questions"></a>Analysis of Algorithms interview questions</h1><h2 id="3-SUM-in-quadratic-time"><a href="#3-SUM-in-quadratic-time" class="headerlink" title="3-SUM in quadratic time"></a>3-SUM in quadratic time</h2><p>It is similar to 2-SUM in O(N). In the 2-SUM, two pointers can be used, which point the begin and end of a sorted array. If the sum of two pointers are bigger than 0, then the end pointer should move backward.</p>
 <p>For 3-SUM problem, here is a solution:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> every x in array:</span><br><span class="line">    #use the solution of 2-SUM</span><br><span class="line">    a[front-pointer] + a[end-pointer] = -x</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>Search in a bitonic array.</p>
-</blockquote>
-<p>1.Standard Version.(~3lgn)</p>
+<h2 id="Search-in-a-bitonic-array"><a href="#Search-in-a-bitonic-array" class="headerlink" title="Search in a bitonic array."></a>Search in a bitonic array.</h2><p>1.Standard Version.(~3lgn)</p>
 <p>Use binary search to find out the maximum number <em>m</em> in the array, then split the array. Use binary search twice for splitted array. In sum, we use binary search for three times, thus it’s ~3lgn.</p>
 <p>2.Signing bonus.</p>
 <p>We don’t need to find out the maximum integer, for binary search could be used in a bitonic array.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if key &gt; a[mid]:</span><br><span class="line">    search in one side only</span><br><span class="line">else:</span><br><span class="line">    search in both side</span><br></pre></td></tr></table></figure>
 <p>Notice that the search function above is always binary search, which means we will solve this problem using recursion. At the end of the recursion, segment of the array will be monotonous. Thus we can use binary search in bitonic array.</p>
-<blockquote>
-<p><strong>Egg drop.</strong> Suppose that you have an n-story building (with floors 1 through n) and plenty of eggs. An egg breaks if it is dropped from floor <em>T</em> or higher and does not break otherwise. Your goal is to devise a strategy to determine the value of T given the following limitations on the number of eggs and tosses:</p>
+<h2 id="Egg-drop-Suppose-that-you-have-an-n-story-building-with-floors-1-through-n-and-plenty-of-eggs-An-egg-breaks-if-it-is-dropped-from-floor-T-or-higher-and-does-not-break-otherwise-Your-goal-is-to-devise-a-strategy-to-determine-the-value-of-T-given-the-following-limitations-on-the-number-of-eggs-and-tosses"><a href="#Egg-drop-Suppose-that-you-have-an-n-story-building-with-floors-1-through-n-and-plenty-of-eggs-An-egg-breaks-if-it-is-dropped-from-floor-T-or-higher-and-does-not-break-otherwise-Your-goal-is-to-devise-a-strategy-to-determine-the-value-of-T-given-the-following-limitations-on-the-number-of-eggs-and-tosses" class="headerlink" title="Egg drop. Suppose that you have an n-story building (with floors 1 through n) and plenty of eggs. An egg breaks if it is dropped from floor T or higher and does not break otherwise. Your goal is to devise a strategy to determine the value of T given the following limitations on the number of eggs and tosses:"></a><strong>Egg drop.</strong> Suppose that you have an n-story building (with floors 1 through n) and plenty of eggs. An egg breaks if it is dropped from floor <em>T</em> or higher and does not break otherwise. Your goal is to devise a strategy to determine the value of T given the following limitations on the number of eggs and tosses:</h2><blockquote>
 <ul>
 <li>Version 0: 1 egg, $\leq$ T tosses.</li>
 <li>Version 1: ~1lg$n$ eggs and ~1 lg$n$ tosses.</li>
