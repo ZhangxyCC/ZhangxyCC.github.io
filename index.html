@@ -314,6 +314,175 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/10/Crack-Leetcode-2/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhang Xinyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhang Xinyan">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/12/10/Crack-Leetcode-2/" class="post-title-link" itemprop="http://yoursite.com/index.html">Crack Leetcode 2</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-12-10 15:34:37 / Modified: 16:03:08" itemprop="dateCreated datePublished" datetime="2018-12-10T15:34:37+08:00">2018-12-10</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="950-Reveal-Cards-In-Increasing-Order"><a href="#950-Reveal-Cards-In-Increasing-Order" class="headerlink" title="#950. Reveal Cards In Increasing Order"></a>#950. Reveal Cards In Increasing Order</h2><p>We need to find out an order of deck which will reveal the cards in increasing order after several steps.</p>
+<p>One intuitive way is reverse the steps, suppose there is deck A which has incresing order, and deck B which is empty at first.<br>(1) Take one card from the bottom of A, put it at the top of B<br>(2) Take one card from the bottom of B, put it at the top of B</p>
+<p>For example, if A = {1,2,3,4,5,6,7}, then<br>(1)we first take 7 and put it in B. B = {7}<br>(2)take 6 from A, then put it on the top of B. B = {6,7};<br>(3) take 7 from B, then put it on the top of B. B = {7,6};<br>(4) take 5 from A, then put it on the top of B. B = {5,7,6};<br>(5) take 6 from B, then put it on the top of B. B = {6,5,7};<br>…<br>As you can see, B is a queue. So we can do it with Queue.</p>
+<p>The thinking is kind of complex (at lease for me), because we need to think it reversely.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] deckRevealedIncreasing(<span class="keyword">int</span>[] deck) &#123;</span><br><span class="line">    	Arrays.sort(deck);</span><br><span class="line">    	Queue&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">    	<span class="keyword">for</span>(<span class="keyword">int</span> i=deck.length-<span class="number">1</span>;i&gt;<span class="number">0</span>;i--) &#123;</span><br><span class="line">    		queue.add(deck[i]);</span><br><span class="line">    		<span class="keyword">int</span> temp = queue.poll();</span><br><span class="line">    		queue.add(temp);</span><br><span class="line">    	&#125;</span><br><span class="line">    	queue.add(deck[<span class="number">0</span>]);</span><br><span class="line">    	<span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[deck.length];</span><br><span class="line">    	<span class="keyword">for</span>(<span class="keyword">int</span> i=deck.length - <span class="number">1</span>;i&gt;= <span class="number">0</span>;i--) &#123;</span><br><span class="line">    		result[i] = queue.remove();</span><br><span class="line">    	&#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>I saw a cool solution in the discuss section and it is simple and clear. It is kind of tricky to me. But it does not need to think reversely.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">//inspired by the discuss</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] deckRevealedIncreasing(<span class="keyword">int</span>[] deck) &#123;</span><br><span class="line">    	Arrays.sort(deck);</span><br><span class="line">    	Queue&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">    	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;deck.length;i++) &#123;</span><br><span class="line">    		queue.add(i);</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[deck.length];</span><br><span class="line">    	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;deck.length;i++) &#123;</span><br><span class="line">    		result[queue.poll()] = deck[i];</span><br><span class="line">    		queue.add(queue.poll());</span><br><span class="line">    	&#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>We suppose the original deck is a queue structure and use index to initialize the queue. It is quite like solving an equation with x,y,z… variables. When we pick the card and put the next card to the bottom of the deck, we manipulate the deck. In the end, the order of the queue will be increasing and we use the index to assign value to queue.</p>
+<h2 id="905-Sort-Array-By-Parity"><a href="#905-Sort-Array-By-Parity" class="headerlink" title="#905. Sort Array By Parity"></a>#905. Sort Array By Parity</h2><p>We can use two pointer.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] sortArrayByParity(<span class="keyword">int</span>[] A) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] B = <span class="keyword">new</span> <span class="keyword">int</span>[A.length];</span><br><span class="line">        <span class="keyword">int</span> evenPointer = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> oddPointer = A.length -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;A.length;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i] %<span class="number">2</span> ==<span class="number">0</span>)&#123;</span><br><span class="line">                B[evenPointer] = A[i];</span><br><span class="line">                evenPointer++;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                B[oddPointer] = A[i];</span><br><span class="line">                oddPointer--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;   </span><br><span class="line">        <span class="keyword">return</span> B;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Below is the code for in place one.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] sortArrayByParity(<span class="keyword">int</span>[] A) &#123;</span><br><span class="line">        <span class="comment">//inplace version</span></span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;A.length;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i] % <span class="number">2</span> == <span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">int</span> temp = A[i];</span><br><span class="line">                A[i] = A[j];</span><br><span class="line">                A[j] = temp;</span><br><span class="line">                j++;     </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> A;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="701-Insert-into-a-Binary-Search-Tree"><a href="#701-Insert-into-a-Binary-Search-Tree" class="headerlink" title="#701. Insert into a Binary Search Tree"></a>#701. Insert into a Binary Search Tree</h2><p>Two solutions can be found. One is recursion, one is not.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">insertIntoBST</span><span class="params">(TreeNode root, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        TreeNode temproot = root;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(temproot.right != <span class="keyword">null</span> &amp;&amp; temproot.val &lt;val)&#123;</span><br><span class="line">                temproot = temproot.right;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(temproot.left != <span class="keyword">null</span> &amp;&amp; temproot.val &gt; val)&#123;</span><br><span class="line">                temproot = temproot.left;</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            	<span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(temproot.val &lt; val) &#123;</span><br><span class="line">        	temproot.right = <span class="keyword">new</span> TreeNode(val);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        	temproot.left = <span class="keyword">new</span> TreeNode(val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Recursion algo</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> TreeNode <span class="title">insertIntoBST</span><span class="params">(TreeNode root, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">new</span> TreeNode(val);</span><br><span class="line">        <span class="keyword">if</span> (root.val &gt; val) root.left = insertIntoBST(root.left, val);</span><br><span class="line">        <span class="keyword">else</span> root.right = insertIntoBST(root.right, val);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/09/Coursera-Algorithm-Interview-Questions/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -724,7 +893,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -971,6 +1140,8 @@
 
   
   
+    
+      
     
       
         
