@@ -314,6 +314,177 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/23/Coursera-Algorithm-Week1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhang Xinyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhang Xinyan">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/01/23/Coursera-Algorithm-Week1/" class="post-title-link" itemprop="http://yoursite.com/index.html">Coursera-Algorithm Week1</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-01-23 11:38:57 / Modified: 13:23:52" itemprop="dateCreated datePublished" datetime="2019-01-23T11:38:57+08:00">2019-01-23</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coursera-Algorithm/" itemprop="url" rel="index"><span itemprop="name">Coursera-Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近又回顾了一遍Coursera上的神课，普林斯顿大学教授Robert Sedgewick主讲的Algorithms. Week1中interview questions已经贴出来了，今天给大家分享的是Week1的assignment:Percolation.</p>
+<p>链接：课程的<a href="http://coursera.cs.princeton.edu/algs4/assignments/percolation.html" target="_blank" rel="noopener">Specification</a></p>
+<p>这个作业的目的是通过蒙特卡洛来估算一个由n*n格子组成系统的渗透阈值。</p>
+<h3 id="何为渗透"><a href="#何为渗透" class="headerlink" title="何为渗透"></a>何为渗透</h3><p>在n*n中，一个格子有三种状态：<br>（1）开放状态open<br>（2）堵塞状态blocked<br>（3）开放且能渗透状态full<br>从系统顶端能通过开放状态的格子到达系统底端，即为渗透。</p>
+<p><img src="http://coursera.cs.princeton.edu/algs4/assignments/percolates-yes.png" alt=""><br><img src="http://coursera.cs.princeton.edu/algs4/assignments/percolates-no.png" alt=""></p>
+<h3 id="何为阈值"><a href="#何为阈值" class="headerlink" title="何为阈值"></a>何为阈值</h3><p>假设一个格子开放的概率为p，可知p=0时系统永不渗透，p=1时系统一定渗透。逐渐增加p值，可以获得渗透阈值。<br><img src="http://coursera.cs.princeton.edu/algs4/assignments/percolation-threshold20.png" alt=""></p>
+<h3 id="代码部分"><a href="#代码部分" class="headerlink" title="代码部分"></a>代码部分</h3><p>可以看出这个问题和老爷子讲的union-find离不开关系，本次作业就是利用Union-find来实现的。</p>
+<p>仔细思考过后发现问题其实并不困难，我用了virtualTop和virtualBottoom，将virtualTop和第一行相连通，virtualBottom和最后一行相连通。最后只要判断virtualTop和virtualBottom有没有连通即可。但是跑了测试样例之后发现一个问题，也就是checklist里面提到的backwash。<br><img src="http://coursera.cs.princeton.edu/algs4/checklists/percolation-backwash.png" alt="backwash"></p>
+<p>通过一个WeightedQuickUnionUF似乎不能解决这个问题，因为我用了两个【手动狗头】一个WeightedQuickUnionUF是带有virtualTop和virtualBottom的，另一个只带有virtualTop。判断full的时候利用第二个WeightedQuickUnionUF，判断是否渗透则用第一个。</p>
+<p>以下是percolation.java的代码。代码中还需注意的一点是我将virtualTop和virtualBottom分别放在了数组的前两位，这样计算其余格子的索引比较方便。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.In;</span><br><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.StdDraw;</span><br><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.WeightedQuickUnionUF;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Percolation</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">boolean</span>[] map; <span class="comment">//用了一维数组，因为相比于二维数组，一维的代码更简洁明了</span></span><br><span class="line">	<span class="keyword">private</span> WeightedQuickUnionUF union;</span><br><span class="line">	<span class="keyword">private</span> WeightedQuickUnionUF backwash;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> N;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> numOpen;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Percolation</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// create n-by-n grid, with all sites blocked</span></span><br><span class="line">		<span class="keyword">if</span>(n &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">		&#125;</span><br><span class="line">		map = <span class="keyword">new</span> <span class="keyword">boolean</span>[n * n + <span class="number">2</span>];</span><br><span class="line">		union = <span class="keyword">new</span> WeightedQuickUnionUF(n * n +<span class="number">2</span>);</span><br><span class="line">		backwash = <span class="keyword">new</span> WeightedQuickUnionUF(n * n +<span class="number">1</span>);</span><br><span class="line">		N = n;</span><br><span class="line">		numOpen = <span class="number">0</span>;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">(<span class="keyword">int</span> row, <span class="keyword">int</span> col)</span> </span>&#123;</span><br><span class="line">    	<span class="comment">// open site (row, col) if it is not open already</span></span><br><span class="line">    	<span class="keyword">if</span>(row &lt;= <span class="number">0</span> || row &gt; N || col &lt;= <span class="number">0</span> || col &gt; N) &#123;</span><br><span class="line">    		<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">int</span> index = (row -<span class="number">1</span>) * N + col + <span class="number">1</span>;</span><br><span class="line">    	<span class="keyword">if</span>(map[index])	<span class="keyword">return</span>;</span><br><span class="line">    	numOpen++;</span><br><span class="line">    	map[index] = <span class="keyword">true</span>;</span><br><span class="line">    	<span class="keyword">if</span>(row == <span class="number">1</span>) &#123;</span><br><span class="line">    		union.union(index, <span class="number">0</span>);</span><br><span class="line">    		backwash.union(index-<span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">if</span>(row == N) &#123;</span><br><span class="line">    		union.union(index, <span class="number">1</span>);</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">if</span>(row != <span class="number">1</span> &amp;&amp; map[index - N]) &#123;</span><br><span class="line">    		union.union(index, index-N);</span><br><span class="line">    		backwash.union(index-<span class="number">1</span>, index-N-<span class="number">1</span>);</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">if</span>(row != N &amp;&amp; map[index + N]) &#123;</span><br><span class="line">    		union.union(index, index+N);</span><br><span class="line">    		backwash.union(index-<span class="number">1</span>, index+N-<span class="number">1</span>);</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">if</span>(col != <span class="number">1</span> &amp;&amp; map[index - <span class="number">1</span>]) &#123;</span><br><span class="line">    		union.union(index, index-<span class="number">1</span>);</span><br><span class="line">    		backwash.union(index-<span class="number">1</span>, index-<span class="number">2</span>);</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">if</span>(col != N &amp;&amp; map[index + <span class="number">1</span>]) &#123;</span><br><span class="line">    		union.union(index, index+<span class="number">1</span>);</span><br><span class="line">    		backwash.union(index-<span class="number">1</span>, index);</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isOpen</span><span class="params">(<span class="keyword">int</span> row, <span class="keyword">int</span> col)</span> </span>&#123;</span><br><span class="line">    	<span class="comment">// is site (row, col) open?</span></span><br><span class="line">    	<span class="keyword">if</span>(row &lt;= <span class="number">0</span> || row &gt; N || col &lt;= <span class="number">0</span> || col &gt; N) &#123;</span><br><span class="line">    		<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">return</span> map[(row -<span class="number">1</span>) * N + col + <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isFull</span><span class="params">(<span class="keyword">int</span> row, <span class="keyword">int</span> col)</span> </span>&#123;</span><br><span class="line">    	<span class="comment">// is site (row, col) full?</span></span><br><span class="line">    	<span class="keyword">if</span>(row &lt;= <span class="number">0</span> || row &gt; N || col &lt;= <span class="number">0</span> || col &gt; N) &#123;</span><br><span class="line">    		<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">return</span> backwash.connected((row -<span class="number">1</span>) * N + col, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numberOfOpenSites</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    	<span class="comment">// number of open sites	</span></span><br><span class="line">    	<span class="keyword">return</span> numOpen;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">percolates</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    	<span class="comment">// does the system percolate?</span></span><br><span class="line">    	<span class="keyword">return</span> union.connected(<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样跑下来是能够获得100分的，但是bonus没有做到。为此还得继续改进。参考了forum中的回答之后，做出如下改动：<br>（1）只用一个WeightedQuickUnionUF<br>（2）将map类型改为byte。0表示堵塞，1表示open，2表示full<br>（3）需多多利用find()函数<br>（4）只加一个virtualTop</p>
+<p>如果开放最后一行的格子，则赋值2，其余赋1.<br>如果任何一方的root是full的，则将双方Union后的root设为full。<br>更改后代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.In;</span><br><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.StdDraw;</span><br><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.WeightedQuickUnionUF;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Percolation</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">byte</span>[] map; </span><br><span class="line">	<span class="keyword">private</span> WeightedQuickUnionUF union;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> N;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> numOpen;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Percolation</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// create n-by-n grid, with all sites blocked</span></span><br><span class="line">		<span class="keyword">if</span>(n &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">		&#125;</span><br><span class="line">		map = <span class="keyword">new</span> <span class="keyword">byte</span>[n * n + <span class="number">1</span>];</span><br><span class="line">		union = <span class="keyword">new</span> WeightedQuickUnionUF(n * n +<span class="number">1</span>);</span><br><span class="line">		N = n;</span><br><span class="line">		numOpen = <span class="number">0</span>;</span><br><span class="line">		map[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">(<span class="keyword">int</span> row, <span class="keyword">int</span> col)</span> </span>&#123;</span><br><span class="line">    	<span class="comment">// open site (row, col) if it is not open already</span></span><br><span class="line">    	<span class="keyword">if</span>(row &lt;= <span class="number">0</span> || row &gt; N || col &lt;= <span class="number">0</span> || col &gt; N) &#123;</span><br><span class="line">    		<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">int</span> index = (row -<span class="number">1</span>) * N + col;</span><br><span class="line">    	<span class="keyword">if</span>(map[index] != <span class="number">0</span>)	<span class="keyword">return</span>;</span><br><span class="line">    	numOpen++;</span><br><span class="line">    	map[index] = <span class="number">1</span>;</span><br><span class="line">    	<span class="keyword">if</span>(row == <span class="number">1</span>) &#123;</span><br><span class="line">    		union.union(<span class="number">0</span>, index);	</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">if</span>(row == N) &#123;</span><br><span class="line">    		map[index] = <span class="number">2</span>;</span><br><span class="line">    		map[union.find(index)] = <span class="number">2</span>;</span><br><span class="line">    	&#125;</span><br><span class="line">    	</span><br><span class="line">    	<span class="keyword">if</span>(row != <span class="number">1</span> &amp;&amp; map[index - N] != <span class="number">0</span>) &#123;</span><br><span class="line">    		<span class="keyword">int</span> rootUp = union.find(index - N);</span><br><span class="line">    		<span class="keyword">int</span> rootCur = union.find(index);</span><br><span class="line">    		union.union(rootUp, rootCur);</span><br><span class="line">    		<span class="keyword">if</span>(map[rootUp] == <span class="number">2</span> || map[rootCur] == <span class="number">2</span>) &#123;</span><br><span class="line">    			map[union.find(index)] = <span class="number">2</span>;</span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">if</span>(row != N &amp;&amp; map[index + N] != <span class="number">0</span>) &#123;</span><br><span class="line">    		<span class="keyword">int</span> rootUp = union.find(index + N);</span><br><span class="line">    		<span class="keyword">int</span> rootCur = union.find(index);</span><br><span class="line">    		union.union(rootUp, rootCur);</span><br><span class="line">    		<span class="keyword">if</span>(map[rootUp] == <span class="number">2</span> || map[rootCur] == <span class="number">2</span>) &#123;</span><br><span class="line">    			map[union.find(index)] = <span class="number">2</span>;</span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">if</span>(col != <span class="number">1</span> &amp;&amp; map[index - <span class="number">1</span>] != <span class="number">0</span>) &#123;</span><br><span class="line">    		<span class="keyword">int</span> rootUp = union.find(index - <span class="number">1</span>);</span><br><span class="line">    		<span class="keyword">int</span> rootCur = union.find(index);</span><br><span class="line">    		union.union(rootUp, rootCur);</span><br><span class="line">    		<span class="keyword">if</span>(map[rootUp] == <span class="number">2</span> || map[rootCur] == <span class="number">2</span>) &#123;</span><br><span class="line">    			map[union.find(index)] = <span class="number">2</span>;</span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">if</span>(col != N &amp;&amp; map[index + <span class="number">1</span>] != <span class="number">0</span>) &#123;</span><br><span class="line">    		<span class="keyword">int</span> rootUp = union.find(index + <span class="number">1</span>);</span><br><span class="line">    		<span class="keyword">int</span> rootCur = union.find(index);</span><br><span class="line">    		union.union(rootUp, rootCur);</span><br><span class="line">    		<span class="keyword">if</span>(map[rootUp] == <span class="number">2</span> || map[rootCur] == <span class="number">2</span>) &#123;</span><br><span class="line">    			map[union.find(index)] = <span class="number">2</span>;</span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isOpen</span><span class="params">(<span class="keyword">int</span> row, <span class="keyword">int</span> col)</span> </span>&#123;</span><br><span class="line">    	<span class="comment">// is site (row, col) open?</span></span><br><span class="line">    	<span class="keyword">if</span>(row &lt;= <span class="number">0</span> || row &gt; N || col &lt;= <span class="number">0</span> || col &gt; N) &#123;</span><br><span class="line">    		<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">return</span> map[(row -<span class="number">1</span>) * N + col] != <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isFull</span><span class="params">(<span class="keyword">int</span> row, <span class="keyword">int</span> col)</span> </span>&#123;</span><br><span class="line">    	<span class="comment">// is site (row, col) full?</span></span><br><span class="line">    	<span class="keyword">if</span>(row &lt;= <span class="number">0</span> || row &gt; N || col &lt;= <span class="number">0</span> || col &gt; N) &#123;</span><br><span class="line">    		<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">return</span> union.connected((row -<span class="number">1</span>) * N + col, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numberOfOpenSites</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    	<span class="comment">// number of open sites	</span></span><br><span class="line">    	<span class="keyword">return</span> numOpen;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">percolates</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    	<span class="comment">// does the system percolate?</span></span><br><span class="line">    	<span class="keyword">return</span> map[union.find(<span class="number">0</span>)] == <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/10/Crack-Leetcode-2/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -893,7 +1064,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -977,7 +1148,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -1140,6 +1311,8 @@
 
   
   
+    
+      
     
       
     
