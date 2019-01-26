@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="Zhang Xinyan">
 <meta property="og:description" content="#950. Reveal Cards In Increasing OrderWe need to find out an order of deck which will reveal the cards in increasing order after several steps. One intuitive way is reverse the steps, suppose there is">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-12-10T08:03:08.746Z">
+<meta property="og:updated_time" content="2019-01-26T02:18:35.788Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Crack Leetcode 2">
 <meta name="twitter:description" content="#950. Reveal Cards In Increasing OrderWe need to find out an order of deck which will reveal the cards in increasing order after several steps. One intuitive way is reverse the steps, suppose there is">
@@ -359,12 +359,24 @@
                 
               
 
-              <time title="Created: 2018-12-10 15:34:37 / Modified: 16:03:08" itemprop="dateCreated datePublished" datetime="2018-12-10T15:34:37+08:00">2018-12-10</time>
+              <time title="Created: 2018-12-10 15:34:37" itemprop="dateCreated datePublished" datetime="2018-12-10T15:34:37+08:00">2018-12-10</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-01-26 10:18:35" itemprop="dateModified" datetime="2019-01-26T10:18:35+08:00">2019-01-26</time>
               
             
           </span>
@@ -417,6 +429,7 @@
       
         <h2 id="950-Reveal-Cards-In-Increasing-Order"><a href="#950-Reveal-Cards-In-Increasing-Order" class="headerlink" title="#950. Reveal Cards In Increasing Order"></a>#950. Reveal Cards In Increasing Order</h2><p>We need to find out an order of deck which will reveal the cards in increasing order after several steps.</p>
 <p>One intuitive way is reverse the steps, suppose there is deck A which has incresing order, and deck B which is empty at first.<br>(1) Take one card from the bottom of A, put it at the top of B<br>(2) Take one card from the bottom of B, put it at the top of B</p>
+<a id="more"></a>
 <p>For example, if A = {1,2,3,4,5,6,7}, then<br>(1)we first take 7 and put it in B. B = {7}<br>(2)take 6 from A, then put it on the top of B. B = {6,7};<br>(3) take 7 from B, then put it on the top of B. B = {7,6};<br>(4) take 5 from A, then put it on the top of B. B = {5,7,6};<br>(5) take 6 from B, then put it on the top of B. B = {6,5,7};<br>…<br>As you can see, B is a queue. So we can do it with Queue.</p>
 <p>The thinking is kind of complex (at lease for me), because we need to think it reversely.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] deckRevealedIncreasing(<span class="keyword">int</span>[] deck) &#123;</span><br><span class="line">    	Arrays.sort(deck);</span><br><span class="line">    	Queue&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">    	<span class="keyword">for</span>(<span class="keyword">int</span> i=deck.length-<span class="number">1</span>;i&gt;<span class="number">0</span>;i--) &#123;</span><br><span class="line">    		queue.add(deck[i]);</span><br><span class="line">    		<span class="keyword">int</span> temp = queue.poll();</span><br><span class="line">    		queue.add(temp);</span><br><span class="line">    	&#125;</span><br><span class="line">    	queue.add(deck[<span class="number">0</span>]);</span><br><span class="line">    	<span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[deck.length];</span><br><span class="line">    	<span class="keyword">for</span>(<span class="keyword">int</span> i=deck.length - <span class="number">1</span>;i&gt;= <span class="number">0</span>;i--) &#123;</span><br><span class="line">    		result[i] = queue.remove();</span><br><span class="line">    	&#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>I saw a cool solution in the discuss section and it is simple and clear. It is kind of tricky to me. But it does not need to think reversely.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">//inspired by the discuss</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] deckRevealedIncreasing(<span class="keyword">int</span>[] deck) &#123;</span><br><span class="line">    	Arrays.sort(deck);</span><br><span class="line">    	Queue&lt;Integer&gt; queue = <span class="keyword">new</span> LinkedList&lt;Integer&gt;();</span><br><span class="line">    	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;deck.length;i++) &#123;</span><br><span class="line">    		queue.add(i);</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[deck.length];</span><br><span class="line">    	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;deck.length;i++) &#123;</span><br><span class="line">    		result[queue.poll()] = deck[i];</span><br><span class="line">    		queue.add(queue.poll());</span><br><span class="line">    	&#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -537,7 +550,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -556,7 +569,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">3</span>
+                      
+                    
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>

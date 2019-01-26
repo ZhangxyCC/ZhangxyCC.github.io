@@ -108,21 +108,21 @@
 
 
 
-  <meta name="description" content="最近又回顾了一遍Coursera上的神课，普林斯顿大学教授Robert Sedgewick主讲的Algorithms. Week1中interview questions已经贴出来了，今天给大家分享的是Week1的assignment:Percolation. 链接：课程的Specification 这个作业的目的是通过蒙特卡洛来估算一个由n*n格子组成系统的渗透阈值。 何为渗透在n*n中，一个格">
+  <meta name="description" content="最近又回顾了一遍Coursera上的神课，普林斯顿大学教授Robert Sedgewick主讲的Algorithms. Week1中interview questions已经贴出来了，今天给大家分享的是Week1的assignment:Percolation. 链接：课程的Specification 这个作业的目的是通过蒙特卡洛来估算一个由n*n格子组成系统的渗透阈值。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Coursera-Algorithm Week1">
 <meta property="og:url" content="http://yoursite.com/2019/01/23/Coursera-Algorithm-Week1/index.html">
 <meta property="og:site_name" content="Zhang Xinyan">
-<meta property="og:description" content="最近又回顾了一遍Coursera上的神课，普林斯顿大学教授Robert Sedgewick主讲的Algorithms. Week1中interview questions已经贴出来了，今天给大家分享的是Week1的assignment:Percolation. 链接：课程的Specification 这个作业的目的是通过蒙特卡洛来估算一个由n*n格子组成系统的渗透阈值。 何为渗透在n*n中，一个格">
+<meta property="og:description" content="最近又回顾了一遍Coursera上的神课，普林斯顿大学教授Robert Sedgewick主讲的Algorithms. Week1中interview questions已经贴出来了，今天给大家分享的是Week1的assignment:Percolation. 链接：课程的Specification 这个作业的目的是通过蒙特卡洛来估算一个由n*n格子组成系统的渗透阈值。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://coursera.cs.princeton.edu/algs4/assignments/percolates-yes.png">
 <meta property="og:image" content="http://coursera.cs.princeton.edu/algs4/assignments/percolates-no.png">
 <meta property="og:image" content="http://coursera.cs.princeton.edu/algs4/assignments/percolation-threshold20.png">
 <meta property="og:image" content="http://coursera.cs.princeton.edu/algs4/checklists/percolation-backwash.png">
-<meta property="og:updated_time" content="2019-01-23T05:23:52.696Z">
+<meta property="og:updated_time" content="2019-01-26T02:18:49.958Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Coursera-Algorithm Week1">
-<meta name="twitter:description" content="最近又回顾了一遍Coursera上的神课，普林斯顿大学教授Robert Sedgewick主讲的Algorithms. Week1中interview questions已经贴出来了，今天给大家分享的是Week1的assignment:Percolation. 链接：课程的Specification 这个作业的目的是通过蒙特卡洛来估算一个由n*n格子组成系统的渗透阈值。 何为渗透在n*n中，一个格">
+<meta name="twitter:description" content="最近又回顾了一遍Coursera上的神课，普林斯顿大学教授Robert Sedgewick主讲的Algorithms. Week1中interview questions已经贴出来了，今天给大家分享的是Week1的assignment:Percolation. 链接：课程的Specification 这个作业的目的是通过蒙特卡洛来估算一个由n*n格子组成系统的渗透阈值。">
 <meta name="twitter:image" content="http://coursera.cs.princeton.edu/algs4/assignments/percolates-yes.png">
 
 
@@ -364,12 +364,24 @@
                 
               
 
-              <time title="Created: 2019-01-23 11:38:57 / Modified: 13:23:52" itemprop="dateCreated datePublished" datetime="2019-01-23T11:38:57+08:00">2019-01-23</time>
+              <time title="Created: 2019-01-23 11:38:57" itemprop="dateCreated datePublished" datetime="2019-01-23T11:38:57+08:00">2019-01-23</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-01-26 10:18:49" itemprop="dateModified" datetime="2019-01-26T10:18:49+08:00">2019-01-26</time>
               
             
           </span>
@@ -423,6 +435,7 @@
         <p>最近又回顾了一遍Coursera上的神课，普林斯顿大学教授Robert Sedgewick主讲的Algorithms. Week1中interview questions已经贴出来了，今天给大家分享的是Week1的assignment:Percolation.</p>
 <p>链接：课程的<a href="http://coursera.cs.princeton.edu/algs4/assignments/percolation.html" target="_blank" rel="noopener">Specification</a></p>
 <p>这个作业的目的是通过蒙特卡洛来估算一个由n*n格子组成系统的渗透阈值。</p>
+<a id="more"></a>
 <h3 id="何为渗透"><a href="#何为渗透" class="headerlink" title="何为渗透"></a>何为渗透</h3><p>在n*n中，一个格子有三种状态：<br>（1）开放状态open<br>（2）堵塞状态blocked<br>（3）开放且能渗透状态full<br>从系统顶端能通过开放状态的格子到达系统底端，即为渗透。</p>
 <p><img src="http://coursera.cs.princeton.edu/algs4/assignments/percolates-yes.png" alt=""><br><img src="http://coursera.cs.princeton.edu/algs4/assignments/percolates-no.png" alt=""></p>
 <h3 id="何为阈值"><a href="#何为阈值" class="headerlink" title="何为阈值"></a>何为阈值</h3><p>假设一个格子开放的概率为p，可知p=0时系统永不渗透，p=1时系统一定渗透。逐渐增加p值，可以获得渗透阈值。<br><img src="http://coursera.cs.princeton.edu/algs4/assignments/percolation-threshold20.png" alt=""></p>
@@ -544,7 +557,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -563,7 +576,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">3</span>
+                      
+                    
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
