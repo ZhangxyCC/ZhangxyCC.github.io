@@ -108,21 +108,24 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="categories">
-<meta property="og:url" content="http://yoursite.com/categories/index.html">
+  <meta name="description" content="之前接触到一道面试题大概是这样的：  给你一个大文件，里面每一行包含一个字符串，设计一种算法随机返回k个字符串，要求每一个字符串返回的概率相同.  果断选择看下一题… 而最近在做Algorithm part1 week2的作业中bonus竟然涉及到了这个问题，没想到竟然是一种算法。于是学习了一番，并再次感叹Algorithm真是门神课…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reservoir Sampling Algorithm">
+<meta property="og:url" content="http://yoursite.com/2019/01/29/Reservoir-Sampling-Algorithm/index.html">
 <meta property="og:site_name" content="Zhang Xinyan">
+<meta property="og:description" content="之前接触到一道面试题大概是这样的：  给你一个大文件，里面每一行包含一个字符串，设计一种算法随机返回k个字符串，要求每一个字符串返回的概率相同.  果断选择看下一题… 而最近在做Algorithm part1 week2的作业中bonus竟然涉及到了这个问题，没想到竟然是一种算法。于是学习了一番，并再次感叹Algorithm真是门神课…">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-12-02T11:06:01.654Z">
+<meta property="og:updated_time" content="2019-01-29T08:29:14.565Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="categories">
+<meta name="twitter:title" content="Reservoir Sampling Algorithm">
+<meta name="twitter:description" content="之前接触到一道面试题大概是这样的：  给你一个大文件，里面每一行包含一个字符串，设计一种算法随机返回k个字符串，要求每一个字符串返回的概率相同.  果断选择看下一题… 而最近在做Algorithm part1 week2的作业中bonus竟然涉及到了这个问题，没想到竟然是一种算法。于是学习了一番，并再次感叹Algorithm真是门神课…">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/">
+  <link rel="canonical" href="http://yoursite.com/2019/01/29/Reservoir-Sampling-Algorithm/">
 
 
 
@@ -132,7 +135,7 @@
   };
 </script>
 
-  <title>categories | Zhang Xinyan</title>
+  <title>Reservoir Sampling Algorithm | Zhang Xinyan</title>
   
 
 
@@ -235,7 +238,7 @@
         
         
           
-          <li class="menu-item menu-item-categories menu-item-active">
+          <li class="menu-item menu-item-categories">
 
     
     
@@ -294,90 +297,203 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/29/Reservoir-Sampling-Algorithm/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhang Xinyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhang Xinyan">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">categories</h1>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="category-all-page">
-            <div class="category-all-title">
-                
-                
-                  
-                    
-                  
-                
-                  
-                    
-                  
-                
-                  
-                    
-                  
-                
-                  
-                    
-                  
-                
-                4 categories in total
-            </div>
-            <div class="category-all">
-              <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coursera-Algorithm/">Coursera-Algorithm</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Leetcode/">Leetcode</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/algorithm/">algorithm</a><span class="category-list-count">2</span></li></ul>
-            </div>
-          </div>
+          <h1 class="post-title" itemprop="name headline">Reservoir Sampling Algorithm
+              
+            
+          </h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-01-29 15:32:28 / Modified: 16:29:14" itemprop="dateCreated datePublished" datetime="2019-01-29T15:32:28+08:00">2019-01-29</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>之前接触到一道面试题大概是这样的：</p>
+<blockquote>
+<p>给你一个大文件，里面每一行包含一个字符串，设计一种算法随机返回k个字符串，要求每一个字符串返回的概率相同.</p>
+</blockquote>
+<p>果断选择看下一题… 而最近在做Algorithm part1 week2的作业中bonus竟然涉及到了这个问题，没想到竟然是一种算法。于是学习了一番，并再次感叹Algorithm真是门神课…<br><a id="more"></a></p>
+<p><em>以下的证明是我在网上看到过的最易理解的。同时根据自己的理解修改了一部分</em></p>
+<h3 id="问题简化到k-1"><a href="#问题简化到k-1" class="headerlink" title="问题简化到k=1"></a><strong>问题简化到k=1</strong></h3><p>首先我们考虑k=1时的情况。</p>
+<p>设当前读取的是第n个元素，采用归纳法分析如下：</p>
+<ol>
+<li>n = 1 时，只有一个元素，直接返回即可，概率为1。</li>
+<li>n = 2 时，前两个元素被选择的概率是相等的，也就是$\frac{1}{2}$。因此可以在[0,2)中随机选取一个整数i，如果i&lt;1就返回第二个元素，否则返回第一个。 </li>
+<li>n = 3 时，要求每个元素返回的概率为1/3。注意此时前两个元素留下来的概率均为1/2。做法是：生成一个[0,3)的随机整数i，若i&lt;1，则返回第三个，否则返回上一步留下的那个。元素1和2留下的概率均为：$\frac{1}{2} * (1-\frac{1}{3}) = \frac{1}{3}$，即上一步留下的概率乘以这一步留下（即元素3不留下）的概率。</li>
+<li>…</li>
+<li>假设 n = m 时，前n个元素留下的概率均为：$\frac{1}{m}$</li>
+<li>那么当 n = m+1 时，生成[0,m+1)之间的随机整数i并判断i是否小于1，若是则留下元素m+1，否则留下上一步留下的元素。这样一来，元素m+1留下的概率为$\frac{1}{m+1}$，前m个元素留下来的概率均为：$\frac{1}{m}* (1 - \frac{1}{m+1}) = \frac{1}{m+1}$，也就是$\frac{1}{n}$</li>
+<li>综上可知，算法成立。</li>
+</ol>
+<h3 id="问题二"><a href="#问题二" class="headerlink" title="问题二"></a><strong>问题二</strong></h3><p>将问题一中的条件变为，k为任意整数的情况，即要求最终返回的元素有k个，这就是水塘抽样（Reservoir Sampling）问题。要求是：取到第n个元素时，前n个元素被留下的几率相等，即k/n。</p>
+<ol>
+<li>当n$\leq$k时，则可直接加入水塘中，此时概率为1</li>
+<li>n=k+1，第k+1个被选中的概率为$\frac{k}{k+1}$. 对于前k个元素中的任意一个i分析，他留下来的概率为：上一步留下来的概率*[1-(第k+1个留下来的概率*替换i的概率)].<br>也就是$\frac{k}{k}<em>(1-\frac{k}{k+1}</em>\frac{1}{k})= \frac{k}{k+1}$。</li>
+<li>假设n=m时，每个元素留下的概率均为 $\frac{k}{m}$.</li>
+<li>那么，当 n = m+1时，第m+1个元素留下的概率为$\frac{k}{m+1}$，前m个元素留下的概率均为：$\frac{k}{m}<em>(1-\frac{k}{m+1} </em> \frac{1}{k}) = \frac{k}{m+1}$</li>
+<li>综上可知，算法成立。</li>
+</ol>
+
       
     </div>
-    
-
-
 
     
+
     
     
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/25/Object-Loitering/" rel="next" title="Object Loitering">
+                <i class="fa fa-chevron-left"></i> Object Loitering
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
 
@@ -407,8 +523,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -497,6 +622,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题简化到k-1"><span class="nav-number">1.</span> <span class="nav-text">问题简化到k=1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题二"><span class="nav-number">2.</span> <span class="nav-text">问题二</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -679,6 +820,36 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+    overflow: auto hidden;
+}
+</style>
+
+    
   
 
 
