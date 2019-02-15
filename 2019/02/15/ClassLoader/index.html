@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="JAVA类装载方式 隐式装载 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中 显式装载 通过class.forname()等方法，显式加载需要的类  类加载的动态性体现一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候再加载，这样的好处是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ClassLoader">
+<meta property="og:url" content="http://yoursite.com/2019/02/15/ClassLoader/index.html">
+<meta property="og:site_name" content="Zhang Xinyan">
+<meta property="og:description" content="JAVA类装载方式 隐式装载 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中 显式装载 通过class.forname()等方法，显式加载需要的类  类加载的动态性体现一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候再加载，这样的好处是">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2019/02/images/classloader_1.png">
+<meta property="og:image" content="http://yoursite.com/2019/02/images/classloader_2.png">
+<meta property="og:updated_time" content="2019-02-15T02:04:17.300Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ClassLoader">
+<meta name="twitter:description" content="JAVA类装载方式 隐式装载 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中 显式装载 通过class.forname()等方法，显式加载需要的类  类加载的动态性体现一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候再加载，这样的好处是">
+<meta name="twitter:image" content="http://yoursite.com/2019/02/images/classloader_1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/15/ClassLoader/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ClassLoader | Zhang Xinyan</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zhang Xinyan</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/15/ClassLoader/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhang Xinyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhang Xinyan">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ClassLoader
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-02-15 09:56:03 / Modified: 10:04:17" itemprop="dateCreated datePublished" datetime="2019-02-15T09:56:03+08:00">2019-02-15</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="JAVA类装载方式"><a href="#JAVA类装载方式" class="headerlink" title="JAVA类装载方式"></a>JAVA类装载方式</h2><ol>
+<li><strong>隐式装载</strong> 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中</li>
+<li><strong>显式装载</strong> 通过class.forname()等方法，显式加载需要的类</li>
+</ol>
+<h2 id="类加载的动态性体现"><a href="#类加载的动态性体现" class="headerlink" title="类加载的动态性体现"></a>类加载的动态性体现</h2><p>一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候再加载，这样的好处是节省了内存的开销，因为java最早就是为嵌入式系统而设计的，内存宝贵，这是一种可以理解的机制，而用到时再加载这也是java动态性的一种体现</p>
+<a id="more"></a>
+<h2 id="类装载器"><a href="#类装载器" class="headerlink" title="类装载器"></a>类装载器</h2><ol>
+<li><p>Bootstrp loader<br>Bootstrp加载器是用C++语言写的，它是在Java虚拟机启动后初始化的，它主要负责加载%JAVA_HOME%/jre/lib,-Xbootclasspath参数指定的路径以及%JAVA_HOME%/jre/classes中的类。</p>
+</li>
+<li><p>ExtClassLoader<br>加载Java的扩展API，也就是/lib/ext中的类。</p>
+</li>
+<li><p>AppClassLoader<br>用来加载用户机器上CLASSPATH设置目录中的Class的，通常在没有指定ClassLoader的情况下，程序员自定义的类就由AppClassLoader进行加载。</p>
+</li>
+</ol>
+<p>综上所述，它们之间的关系可以通过下图形象的描述：<br><img src="../../images/classloader_1.png" alt=""></p>
+<h2 id="类加载器之间是如何协调工作的"><a href="#类加载器之间是如何协调工作的" class="headerlink" title="类加载器之间是如何协调工作的"></a>类加载器之间是如何协调工作的</h2><p>前面说了，java中有三个类加载器，问题就来了，碰到一个类需要加载时，它们之间是如何协调工作的，即java是如何区分一个类该由哪个类加载器来完成呢。 在这里java采用了<strong>委托模型机制</strong>，这个机制简单来讲，就是<strong>“类装载器有载入类的需求时，会先请示其Parent使用其搜索路径帮忙载入，如果Parent 找不到,那么才由自己依照自己的搜索路径搜索类”</strong></p>
+<p>举例:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Public <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="function">Public <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] arg)</span></span>&#123;</span><br><span class="line"> </span><br><span class="line">      ClassLoader c  = Test.class.getClassLoader();  <span class="comment">//获取Test类的类加载器</span></span><br><span class="line">        System.out.println(c); </span><br><span class="line">      ClassLoader c1 = c.getParent();  <span class="comment">//获取c这个类加载器的父类加载器</span></span><br><span class="line">        System.out.println(c1);</span><br><span class="line">      ClassLoader c2 = c1.getParent();<span class="comment">//获取c1这个类加载器的父类加载器</span></span><br><span class="line">        System.out.println(c2);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">……AppClassLoader……</span><br><span class="line"> </span><br><span class="line">……ExtClassLoader……</span><br><span class="line"> </span><br><span class="line">Null</span><br></pre></td></tr></table></figure></p>
+<p>可以看出Test是由AppClassLoader加载器加载的，AppClassLoader的Parent 加载器是 ExtClassLoader,但是ExtClassLoader的Parent为 null 是怎么回事呵，朋友们留意的话，前面有提到Bootstrap Loader是用C++语言写的，依java的观点来看，逻辑上并不存在Bootstrap Loader的类实体，所以在java程序代码里试图打印出其内容时，我们就会看到输出为null。</p>
+<h2 id="ClassLoader加载流程"><a href="#ClassLoader加载流程" class="headerlink" title="ClassLoader加载流程"></a>ClassLoader加载流程</h2><p>当运行一个程序时，jvm（java虚拟机启动），运行bootstrap classloader（启动类加载器），该加载器加载java核心API。注意此时Extclassloader和AppClassloader也在此时被加载。然后调用ExtClassloader加载扩展API，最后AppClassloader加载CLASSPATH目录下定义的Class，这就是一个程序最基本的加载流程。</p>
+<p>下面来看一下ClassLoader中的一段代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">synchronized</span> Class <span class="title">loadClass</span><span class="params">(String name, <span class="keyword">boolean</span> resolve)</span> <span class="keyword">throws</span> ClassNotFoundException </span>&#123;</span><br><span class="line"><span class="comment">//首先检查该name指定的class是否有被加载 Class c = findLoadedClass(name);</span></span><br><span class="line">If (c == <span class="keyword">null</span>) &#123; </span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line"><span class="comment">//如果parent不为null，则调用parent的loadClass进行加载 c =                   parent.loadClass(name, false);</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="comment">//parent 为 null，则调用 BootstrapClassLoader 进行加载 c =                  findBootstrapClassO(name);</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line"><span class="comment">//如果仍然无法加载成功，则调用自身的findClass进行加载 c =               findClass(name);</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (resolve) &#123; </span><br><span class="line">    resolveClass(c);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从上面一段代码中也可以看出，一个类加载的过程使用了一种父类委托模式。 <strong>为什么要使用这种父类委托模式呢？</strong><br>第1个原因就是这样可以避免重复加载，当父类已经加载了该类的时候， 就没有必要子ClassLoader再加载一次，就保证了使用不同的类加载器最终得到的都是同样一个Object对象<br>第2个原因就是考虑到安全因素，如果不使用这种委托模式，那么可以随 时使用自定义的String来动态替代Java核心API中定义的类型，这样会存在非 常大的安全隐患，而父类委托的方式就可以避免这种情况，因为String已经在 启动时被加载，所以，用户自定义类是无法加载一个自定义的ClassLoader。</p>
+<h2 id="JVM-类加载机制"><a href="#JVM-类加载机制" class="headerlink" title="JVM 类加载机制"></a>JVM 类加载机制</h2><p>JVM类加载机制分为五个部分：加载，验证，准备，解析，初始化，下面我们就分别来看一下这五个过程。<br><img src="../../images/classloader_2.png" alt=""><br>（1）加载<br>加载是类加载过程中的一个阶段，这个阶段会在内存中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的入口。注意这里不一定非得要从一个Class文件获取，这里既可以从ZIP包中读取（比如从jar包和war包中读取），也可以在运行时计算生成（动态代理），也可以由其它文件生成（比如将JSP文件转换成对应的Class类）。<br>（2）验证<br>这一阶段的主要目的是为了确保Class文件的字节流中包含的信息是否符合当前虚拟机的要求，并且不会危害虚拟机自身的安全。<br>（3）准备<br>准备阶段是正式为类变量分配内存并设置类变量的初始值阶段，即在方法区中分配这些变量所使用的内存空间。注意这里所说的初始值概念，比如一个类变量定义为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> v = <span class="number">8080</span>;</span><br></pre></td></tr></table></figure></p>
+<p>在编译阶段会为v生成ConstantValue属性，在准备阶段虚拟机会根据ConstantValue属性将v赋值为8080。<br>（4）解析<br>解析阶段是指虚拟机将常量池中的符号引用替换为直接引用的过程。符号引用就是class文件中的：</p>
+<ul>
+<li>CONSTANT_Class_info</li>
+<li>CONSTANT_Field_info</li>
+</ul>
+<ul>
+<li>CONSTANT_Method_info</li>
+</ul>
+<p>等类型的常量。<br>下面我们解释一下符号引用和直接引用的概念：</p>
+<ul>
+<li>符号引用与虚拟机实现的布局无关，引用的目标并不一定要已经加载到内存中。各种虚拟机实现的内存布局可以各不相同，但是它们能接受的符号引用必须是一致的，因为符号引用的字面量形式明确定义在Java虚拟机规范的Class文件格式中。</li>
+<li>直接引用可以是指向目标的指针，相对偏移量或是一个能间接定位到目标的句柄。如果有了直接引用，那引用的目标必定已经在内存中存在。</li>
+</ul>
+<p>(5)初始化<br>初始化阶段是类加载最后一个阶段，前面的类加载阶段之后，除了在加载阶段可以自定义类加载器以外，其它操作都由JVM主导。到了初始阶段，才开始真正执行类中定义的Java程序代码。<br>初始化阶段是执行类构造器<client>方法的过程。<client>方法是由编译器自动收集类中的类变量的赋值操作和静态语句块中的语句合并而成的。虚拟机会保证<client>方法执行之前，父类的<client>方法已经执行完毕。p.s: 如果一个类中没有对静态变量赋值也没有静态语句块，那么编译器可以不为这个类生成<client>()方法。<br>注意以下几种情况不会执行类初始化：</client></client></client></client></client></p>
+<ul>
+<li>通过子类引用父类的静态字段，只会触发父类的初始化，而不会触发子类的初始化</li>
+<li>定义对象数组，不会触发该类的初始化。</li>
+<li>常量在编译期间会存入调用类的常量池中，本质上并没有直接引用定义常量的类，不会触发定义常量所在的类。</li>
+<li>通过类名获取Class对象，不会触发类的初始化。</li>
+<li>通过Class.forName加载指定类时，如果指定参数initialize为false时，也不会触发类初始化，其实这个参数是告诉虚拟机，是否要对类进行初始化。</li>
+<li>通过ClassLoader默认的loadClass方法，也不会触发初始化动作。</li>
+</ul>
+<h2 id="forName和loadClass的区别"><a href="#forName和loadClass的区别" class="headerlink" title="forName和loadClass的区别"></a>forName和loadClass的区别</h2><p>Class类中有一个静态方法forName，这个方法和ClassLoader中的loadClass方法 的目的一样，都是用来加载class的，但是两者在作用上却有所区別。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Class clazz = Class. forName (<span class="string">"something"</span>);</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">ClassLoadercl = Thread.currentThread().getContextClassLoader();</span><br><span class="line">Class clazz = cl.loadClass(<span class="string">"something"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>Class.forName()调用 Class.forName(name，initialize, loader);也就是 Class. forName(“something”);等同于 Class.forName (“something”，true, CALLCLASS. class.getClassLoader())；</p>
+<p>第二个参数“true”是用于设置加载类的时候是否连接该类，true就连接， 否则就不连接。<br>在Java API文档中，loadClass方法的定义是protected，也就是说，该方法 是被保护的，而用户使用的方法是一个参数，一个参数的loadClass方法实际上 就是调用了两个参数，第二个参数默认为false。因此，在这里可以看出通过 loadClass加载类实际上就是加载的时候并不对该类进行解释，因此不会初始化 该类，而Class类的forName方法则相反，使用forName加载的时候就会将Class 进行解释和初始化。</p>
+<p>参考文档：<br>【1】Java程序员面试宝典<br>【2】<a href="http://www.importnew.com/25295.html" target="_blank" rel="noopener">http://www.importnew.com/25295.html</a><br>【3】<a href="https://www.cnblogs.com/doit8791/p/5820037.html" target="_blank" rel="noopener">https://www.cnblogs.com/doit8791/p/5820037.html</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/03/Coursera-Algorithm-Week2-Interview-Questions/" rel="next" title="Coursera-Algorithm Week2 Interview Questions">
+                <i class="fa fa-chevron-left"></i> Coursera-Algorithm Week2 Interview Questions
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Zhang Xinyan</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/ZhangxyCC" title="GitHub &rarr; https://github.com/ZhangxyCC" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:xinyanz.c@gmail.com" title="E-Mail &rarr; mailto:xinyanz.c@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JAVA类装载方式"><span class="nav-number">1.</span> <span class="nav-text">JAVA类装载方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载的动态性体现"><span class="nav-number">2.</span> <span class="nav-text">类加载的动态性体现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类装载器"><span class="nav-number">3.</span> <span class="nav-text">类装载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载器之间是如何协调工作的"><span class="nav-number">4.</span> <span class="nav-text">类加载器之间是如何协调工作的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ClassLoader加载流程"><span class="nav-number">5.</span> <span class="nav-text">ClassLoader加载流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-类加载机制"><span class="nav-number">6.</span> <span class="nav-text">JVM 类加载机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forName和loadClass的区别"><span class="nav-number">7.</span> <span class="nav-text">forName和loadClass的区别</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhang Xinyan</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

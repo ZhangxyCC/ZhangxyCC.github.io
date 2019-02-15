@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本周的主题是Collinear Points, 作业巧妙地把模式识别的基础和排序结合在一起。在给出的点坐标的情况下，返回练成线的个数和起点终点。课程Speficication 作业分为3个部分1) Point.java 定义Point类，完成相关操作2) BruteCollinearPoints.java 通过暴力算法得到有几条连成的线3) 与2)对比的，有了FastCollinearPoints">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coursera-Algorithm Week3">
+<meta property="og:url" content="http://yoursite.com/2019/02/01/Coursera-Algorithm-Week3/index.html">
+<meta property="og:site_name" content="Zhang Xinyan">
+<meta property="og:description" content="本周的主题是Collinear Points, 作业巧妙地把模式识别的基础和排序结合在一起。在给出的点坐标的情况下，返回练成线的个数和起点终点。课程Speficication 作业分为3个部分1) Point.java 定义Point类，完成相关操作2) BruteCollinearPoints.java 通过暴力算法得到有几条连成的线3) 与2)对比的，有了FastCollinearPoints">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://coursera.cs.princeton.edu/algs4/assignments/lines2.png">
+<meta property="og:updated_time" content="2019-02-01T09:26:56.086Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Coursera-Algorithm Week3">
+<meta name="twitter:description" content="本周的主题是Collinear Points, 作业巧妙地把模式识别的基础和排序结合在一起。在给出的点坐标的情况下，返回练成线的个数和起点终点。课程Speficication 作业分为3个部分1) Point.java 定义Point类，完成相关操作2) BruteCollinearPoints.java 通过暴力算法得到有几条连成的线3) 与2)对比的，有了FastCollinearPoints">
+<meta name="twitter:image" content="http://coursera.cs.princeton.edu/algs4/assignments/lines2.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/01/Coursera-Algorithm-Week3/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Coursera-Algorithm Week3 | Zhang Xinyan</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zhang Xinyan</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/01/Coursera-Algorithm-Week3/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhang Xinyan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhang Xinyan">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Coursera-Algorithm Week3
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-02-01 16:51:30 / Modified: 17:26:56" itemprop="dateCreated datePublished" datetime="2019-02-01T16:51:30+08:00">2019-02-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Coursera-Algorithm/" itemprop="url" rel="index"><span itemprop="name">Coursera-Algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本周的主题是Collinear Points, 作业巧妙地把模式识别的基础和排序结合在一起。在给出的点坐标的情况下，返回练成线的个数和起点终点。<br>课程<a href="http://coursera.cs.princeton.edu/algs4/assignments/collinear.html" target="_blank" rel="noopener">Speficication</a></p>
+<p><img src="http://coursera.cs.princeton.edu/algs4/assignments/lines2.png" alt=""><br>作业分为3个部分<br>1) Point.java 定义Point类，完成相关操作<br>2) BruteCollinearPoints.java 通过暴力算法得到有几条连成的线<br>3) 与2)对比的，有了FastCollinearPoints.java，我们需要自己设计算法，提高时间效率</p>
+<a id="more"></a>
+<h3 id="Point-java"><a href="#Point-java" class="headerlink" title="Point.java"></a>Point.java</h3><p>Point中使用了Java的Comparable与Comparator，需要细细琢磨才能明白作业的意图。不明白的同学可以参考Comparators一节最后的部分<em>Polar order</em>。同时注意计算斜率时的返回值为double类型。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.StdDraw;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Point</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Point</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> x;     <span class="comment">// x-coordinate of this point</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> y;     <span class="comment">// y-coordinate of this point</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Point</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="comment">/* DO NOT MODIFY */</span></span><br><span class="line">        <span class="keyword">this</span>.x = x;</span><br><span class="line">        <span class="keyword">this</span>.y = y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/* DO NOT MODIFY */</span></span><br><span class="line">        StdDraw.point(x, y);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawTo</span><span class="params">(Point that)</span> </span>&#123;</span><br><span class="line">        <span class="comment">/* DO NOT MODIFY */</span></span><br><span class="line">        StdDraw.line(<span class="keyword">this</span>.x, <span class="keyword">this</span>.y, that.x, that.y);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">slopeTo</span><span class="params">(Point that)</span> </span>&#123;</span><br><span class="line">    	<span class="keyword">if</span>(compareTo(that) == <span class="number">0</span>)	<span class="keyword">return</span> Double.NEGATIVE_INFINITY;</span><br><span class="line">    	<span class="keyword">if</span>(<span class="keyword">this</span>.y == that.y)	<span class="keyword">return</span> +<span class="number">0.0</span>;</span><br><span class="line">    	<span class="keyword">if</span>(<span class="keyword">this</span>.x == that.x)	<span class="keyword">return</span> Double.POSITIVE_INFINITY;</span><br><span class="line">    	<span class="keyword">return</span> (<span class="keyword">double</span>)(that.y - <span class="keyword">this</span>.y) / (that.x - <span class="keyword">this</span>.x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Point that)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.y &lt; that.y)	<span class="keyword">return</span>	-<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.y &gt; that.y)	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">        	<span class="keyword">if</span>(<span class="keyword">this</span>.x &lt; that.x)	<span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        	<span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.x &gt; that.x)	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        	<span class="keyword">else</span>	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Comparator&lt;Point&gt; <span class="title">slopeOrder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/* YOUR CODE HERE */</span></span><br><span class="line">    	<span class="keyword">return</span> <span class="keyword">new</span> pointComparator(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">pointComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Point</span>&gt;</span>&#123;</span><br><span class="line">    	<span class="keyword">private</span> Point p;</span><br><span class="line">    	<span class="function"><span class="keyword">public</span> <span class="title">pointComparator</span><span class="params">(Point p)</span> </span>&#123;</span><br><span class="line">    		<span class="keyword">this</span>.p = p;</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="meta">@Override</span></span><br><span class="line">    	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Point o1, Point o2)</span> </span>&#123;</span><br><span class="line">    		<span class="keyword">double</span> l1 = p.slopeTo(o1);</span><br><span class="line">    		<span class="keyword">double</span> l2 = p.slopeTo(o2);</span><br><span class="line">    		<span class="keyword">if</span>(l1 &lt; l2)	<span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    		<span class="keyword">else</span> <span class="keyword">if</span>(l1 &gt; l2)	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    		<span class="keyword">else</span>	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/* DO NOT MODIFY */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"("</span> + x + <span class="string">", "</span> + y + <span class="string">")"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="BruteCollinearPoints-java"><a href="#BruteCollinearPoints-java" class="headerlink" title="BruteCollinearPoints.java"></a>BruteCollinearPoints.java</h3><p>要求时间复杂度为n4，且不考虑5点及以上练成线的情况。其实也是个很明显的提示了，就是用循环实现。在checklist中的提示更为明显：<code>One approach is to form a line segment only if the 4 points are in ascending order (say, relative to the natural order), in which case, the endpoints are the first and last points.</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.In;</span><br><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.StdDraw;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BruteCollinearPoints</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> LineSegment[] lines;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">BruteCollinearPoints</span><span class="params">(Point[] points)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// finds all line segments containing 4 points</span></span><br><span class="line">		<span class="keyword">if</span> (points == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">	</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;points.length;i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(points[i] == <span class="keyword">null</span>)	<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>;j&lt;points.length;j++) &#123;</span><br><span class="line">				<span class="keyword">if</span>(points[j] == <span class="keyword">null</span>)	<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">				<span class="keyword">if</span>(points[i].compareTo(points[j]) == <span class="number">0</span>)	<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		Point[] ps = points.clone();</span><br><span class="line">		ArrayList&lt;LineSegment&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		Arrays.sort(ps);</span><br><span class="line">		<span class="keyword">int</span> len = ps.length;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> p = <span class="number">0</span>;p&lt;len-<span class="number">3</span>;p++) &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> q = p+<span class="number">1</span>;q&lt;len-<span class="number">2</span>;q++) &#123;</span><br><span class="line">				<span class="keyword">double</span> pq = ps[p].slopeTo(ps[q]);</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> r = q+<span class="number">1</span>;r &lt;len-<span class="number">1</span>;r++) &#123;</span><br><span class="line">					<span class="keyword">double</span> qr = ps[q].slopeTo(ps[r]);</span><br><span class="line">					<span class="keyword">if</span>(pq != qr)	<span class="keyword">continue</span>;</span><br><span class="line">					<span class="keyword">for</span>(<span class="keyword">int</span> s =r +<span class="number">1</span>;s &lt; len;s++) &#123;</span><br><span class="line">						<span class="keyword">double</span> rs = ps[r].slopeTo(ps[s]);</span><br><span class="line">						<span class="keyword">if</span>(qr == rs) &#123;	</span><br><span class="line">							Point[] temp = <span class="keyword">new</span> Point[<span class="number">4</span>];</span><br><span class="line">							temp[<span class="number">0</span>] = ps[p];</span><br><span class="line">							temp[<span class="number">1</span>] = ps[q];</span><br><span class="line">							temp[<span class="number">2</span>] = ps[r];</span><br><span class="line">							temp[<span class="number">3</span>] = ps[s];</span><br><span class="line">							Arrays.sort(temp);</span><br><span class="line">							<span class="keyword">if</span>(ps[p] == temp[<span class="number">0</span>])	res.add(<span class="keyword">new</span> LineSegment(temp[<span class="number">0</span>],temp[<span class="number">3</span>]));</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		lines = <span class="keyword">new</span> LineSegment[res.size()];</span><br><span class="line">		size = res.size();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;res.size();i++) &#123;</span><br><span class="line">			lines[i] = res.get(i);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numberOfSegments</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// the number of line segments</span></span><br><span class="line">		<span class="keyword">return</span> size;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> LineSegment[] segments() &#123;</span><br><span class="line">		<span class="comment">// the line segments</span></span><br><span class="line">		<span class="keyword">return</span> lines.clone();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		String filename = <span class="string">"d.txt"</span>;</span><br><span class="line">		In in = <span class="keyword">new</span> In(filename);</span><br><span class="line">	    <span class="keyword">int</span> N = in.readInt();</span><br><span class="line">        Point[] points = <span class="keyword">new</span> Point[N];</span><br><span class="line">        StdDraw.clear();</span><br><span class="line">        StdDraw.setPenColor(StdDraw.BLACK);</span><br><span class="line">        StdDraw.setPenRadius(<span class="number">0.01</span>);</span><br><span class="line">        StdDraw.setXscale(<span class="number">0</span>,<span class="number">32767</span>);</span><br><span class="line">        StdDraw.setYscale(<span class="number">0</span>,<span class="number">32767</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> x = in.readInt();</span><br><span class="line">            <span class="keyword">int</span> y = in.readInt();</span><br><span class="line">            points[i] = <span class="keyword">new</span> Point(x, y);</span><br><span class="line">            points[i].draw();</span><br><span class="line">        &#125;</span><br><span class="line">        StdDraw.show();</span><br><span class="line">        BruteCollinearPoints b = <span class="keyword">new</span> BruteCollinearPoints(points);</span><br><span class="line">        System.out.println(b.numberOfSegments()); </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="FastCollinearPoints-java"><a href="#FastCollinearPoints-java" class="headerlink" title="FastCollinearPoints.java"></a>FastCollinearPoints.java</h3><p>这时候可以充分利用自己编写的comparator了。我的想法基本如下<br>1) 先将points按照自然顺序排序，利用Arrays.sort(points)<br>2) 对每一个点p(pivot),都以其comparator对points数组进行排序，需要注意的是我们不能直接对points数组排序，而是通过克隆来做到。<br>3) 遍历排完序的数组，并设置counter，计算每个点和第一个点（pivot）的斜率slope,如果相同斜率的点超过4个就将整个临时数组排序，临时数组的第一个点和最后一个点就是线头和线尾<br><strong>如何防止重复的segment</strong>:在第三步中，检查临时数组的第一个是否等于pivot</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Collections;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FastCollinearPoints</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> LineSegment[] lines;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">FastCollinearPoints</span><span class="params">(Point[] points)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// finds all line segments containing 4 or more points</span></span><br><span class="line">		<span class="keyword">if</span> (points == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">		<span class="keyword">int</span> len = points.length;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++) &#123;</span><br><span class="line">			<span class="keyword">if</span>(points[i] == <span class="keyword">null</span>)	<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>;j&lt;len;j++) &#123;</span><br><span class="line">				<span class="keyword">if</span>(points[j] == <span class="keyword">null</span>)	<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">				<span class="keyword">if</span>(points[i].compareTo(points[j]) == <span class="number">0</span>)	<span class="keyword">throw</span> <span class="keyword">new</span> java.lang.IllegalArgumentException();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		Point[] clonePoints = points.clone();</span><br><span class="line">		ArrayList&lt;LineSegment&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		<span class="keyword">if</span>(len &lt; <span class="number">4</span>)	&#123;</span><br><span class="line">			lines = <span class="keyword">new</span> LineSegment[<span class="number">0</span>];</span><br><span class="line">			size = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		Arrays.sort(clonePoints);</span><br><span class="line">		<span class="keyword">for</span>(Point p : clonePoints) &#123;</span><br><span class="line">			Point[] temp = clonePoints.clone();</span><br><span class="line">			Arrays.sort(temp,p.slopeOrder());</span><br><span class="line">			<span class="keyword">double</span> slope = p.slopeTo(temp[<span class="number">1</span>]);</span><br><span class="line">			ArrayList&lt;Point&gt; beLine = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">			beLine.add(p);</span><br><span class="line">			beLine.add(temp[<span class="number">1</span>]);</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;len;i++) &#123;</span><br><span class="line">				<span class="keyword">double</span> slopeTemp = p.slopeTo(temp[i]);</span><br><span class="line">				<span class="keyword">if</span>(slopeTemp != slope) &#123;</span><br><span class="line">					<span class="keyword">int</span> beLinesize = beLine.size();</span><br><span class="line">					<span class="keyword">if</span>(beLinesize &gt;= <span class="number">4</span>) &#123;</span><br><span class="line">						<span class="keyword">int</span> j;</span><br><span class="line">						<span class="keyword">for</span>(j=<span class="number">1</span>;j&lt;beLinesize;j++) &#123;</span><br><span class="line">							<span class="keyword">if</span>(p.compareTo(beLine.get(j)) != -<span class="number">1</span>)	<span class="keyword">break</span>;</span><br><span class="line">						&#125;</span><br><span class="line">						<span class="keyword">if</span>(j == beLinesize)	res.add(<span class="keyword">new</span> LineSegment(p,beLine.get(beLinesize-<span class="number">1</span>)));</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">if</span>(i == len -<span class="number">1</span>)	<span class="keyword">break</span>;</span><br><span class="line">					beLine = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">					beLine.add(p);</span><br><span class="line">					beLine.add(temp[i]);</span><br><span class="line">					slope = slopeTemp;</span><br><span class="line"></span><br><span class="line">				&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">					beLine.add(temp[i]);</span><br><span class="line">					<span class="keyword">if</span>(i == len-<span class="number">1</span> &amp;&amp; beLine.size() &gt;= <span class="number">4</span>) &#123;</span><br><span class="line">						Collections.sort(beLine);</span><br><span class="line">						<span class="keyword">if</span>(beLine.get(<span class="number">0</span>) == p) &#123;</span><br><span class="line">							res.add(<span class="keyword">new</span> LineSegment(p,beLine.get(beLine.size()-<span class="number">1</span>)));</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;	</span><br><span class="line">		lines = <span class="keyword">new</span> LineSegment[res.size()];</span><br><span class="line">		size = res.size();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;res.size();i++) &#123;</span><br><span class="line">			lines[i] = res.get(i);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numberOfSegments</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	   <span class="comment">// the number of line segments</span></span><br><span class="line">    	<span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> LineSegment[] segments() &#123;</span><br><span class="line">	   <span class="comment">// the line segments</span></span><br><span class="line">    	<span class="keyword">return</span> lines.clone();   <span class="comment">//clone() for immutability test</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/01/Coursera-Algorithm-Week2/" rel="next" title="Coursera-Algorithm Week2">
+                <i class="fa fa-chevron-left"></i> Coursera-Algorithm Week2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/03/Coursera-Algorithm-Week2-Interview-Questions/" rel="prev" title="Coursera-Algorithm Week2 Interview Questions">
+                Coursera-Algorithm Week2 Interview Questions <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Zhang Xinyan</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/ZhangxyCC" title="GitHub &rarr; https://github.com/ZhangxyCC" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:xinyanz.c@gmail.com" title="E-Mail &rarr; mailto:xinyanz.c@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Point-java"><span class="nav-number">1.</span> <span class="nav-text">Point.java</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BruteCollinearPoints-java"><span class="nav-number">2.</span> <span class="nav-text">BruteCollinearPoints.java</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FastCollinearPoints-java"><span class="nav-number">3.</span> <span class="nav-text">FastCollinearPoints.java</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhang Xinyan</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
